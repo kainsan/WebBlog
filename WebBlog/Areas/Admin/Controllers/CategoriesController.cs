@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using PagedList.Core;
+using WebBlog.Helpers;
 using WebBlog.Models;
 
 namespace WebBlog.Areas.Admin.Controllers
@@ -20,9 +23,16 @@ namespace WebBlog.Areas.Admin.Controllers
         }
 
         // GET: Admin/Categories
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int? page)
         {
-              return View(await _context.Categories.ToListAsync());
+            var pageNumber = page == null || page <= 0 ? 1 : page.Value;
+            // var pageSize = Utilities.PAGE_SIZE;
+            var pageSize = 1;
+            var lsCategories = _context.Categories
+                    .OrderByDescending(x => x.CatId);
+            PagedList<Category> models = new PagedList<Category>(lsCategories, pageNumber, pageSize);
+            ViewBag.CurrentPage = pageNumber;
+            return View(models);
         }
 
         // GET: Admin/Categories/Details/5
@@ -45,7 +55,9 @@ namespace WebBlog.Areas.Admin.Controllers
 
         // GET: Admin/Categories/Create
         public IActionResult Create()
+
         {
+            ViewData["Original Category"] = new SelectList(_context.Categories.Where(x => x.Levels == 1), "CatId", "CatName");
             return View();
         }
 
@@ -54,10 +66,37 @@ namespace WebBlog.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CatId,CatName,Title,Alias,MetaDesc,MetaKey,Thumb,Published,Ordering,Parents,Levels,Icon,Cover,Description")] Category category)
+        public async Task<IActionResult> Create([Bind("CatId,CatName,Title,Alias,MetaDesc,MetaKey,Thumb,Published,Ordering,Parents,Levels,Icon,Cover,Description")] Category category,Microsoft.AspNetCore.Http.IFormFile fThumb, Microsoft.AspNetCore.Http.IFormFile fCover, Microsoft.AspNetCore.Http.IFormFile fIcon)
         {
             if (ModelState.IsValid)
             {
+                category.Alias = Utilities.SEOUrl(category.CatName);
+                if(category.Parents == null)
+                {
+                    category.Levels = 1;
+                }
+                else
+                {
+                    category.Levels = category.Parents ==0 ? 1 : 2;
+                }
+                if( fThumb != null)
+                {
+                    string extension = Path.GetExtension(fThumb.FileName);
+                    string Newname = Utilities.SEOUrl(category.CatName) +"preview_ " + extension;
+                    category.Thumb = await Utilities.UploadFile(fThumb, @"categories\", Newname.ToLower());
+                }
+                if (fCover != null)
+                {
+                    string extension = Path.GetExtension(fCover.FileName);
+                    string Newname = "cover_ "+Utilities.SEOUrl(category.CatName) + extension;
+                    category.Cover = await Utilities.UploadFile(fCover, @"covers\", Newname.ToLower());
+                }
+                if (fIcon != null)
+                {
+                    string extension = Path.GetExtension(fIcon.FileName);
+                    string Newname = "icon_ " + Utilities.SEOUrl(category.CatName) + extension;
+                    category.Icon = await Utilities.UploadFile(fCover, @"icons\", Newname.ToLower());
+                }
                 _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -86,7 +125,7 @@ namespace WebBlog.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CatId,CatName,Title,Alias,MetaDesc,MetaKey,Thumb,Published,Ordering,Parents,Levels,Icon,Cover,Description")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("CatId,CatName,Title,Alias,MetaDesc,MetaKey,Thumb,Published,Ordering,Parents,Levels,Icon,Cover,Description")] Category category, Microsoft.AspNetCore.Http.IFormFile fThumb, Microsoft.AspNetCore.Http.IFormFile fCover, Microsoft.AspNetCore.Http.IFormFile fIcon)
         {
             if (id != category.CatId)
             {
@@ -97,6 +136,33 @@ namespace WebBlog.Areas.Admin.Controllers
             {
                 try
                 {
+                    category.Alias = Utilities.SEOUrl(category.CatName);
+                    if (category.Parents == null)
+                    {
+                        category.Levels = 1;
+                    }
+                    else
+                    {
+                        category.Levels = category.Parents == 0 ? 1 : 2;
+                    }
+                    if (fThumb != null)
+                    {
+                        string extension = Path.GetExtension(fThumb.FileName);
+                        string Newname = Utilities.SEOUrl(category.CatName) + "preview_ " + extension;
+                        category.Thumb = await Utilities.UploadFile(fThumb, @"categories\", Newname.ToLower());
+                    }
+                    if (fCover != null)
+                    {
+                        string extension = Path.GetExtension(fCover.FileName);
+                        string Newname = "cover_ " + Utilities.SEOUrl(category.CatName) + extension;
+                        category.Cover = await Utilities.UploadFile(fCover, @"covers\", Newname.ToLower());
+                    }
+                    if (fIcon != null)
+                    {
+                        string extension = Path.GetExtension(fIcon.FileName);
+                        string Newname = "icon_ " + Utilities.SEOUrl(category.CatName) + extension;
+                        category.Icon = await Utilities.UploadFile(fCover, @"icons\", Newname.ToLower());
+                    }
                     _context.Update(category);
                     await _context.SaveChangesAsync();
                 }

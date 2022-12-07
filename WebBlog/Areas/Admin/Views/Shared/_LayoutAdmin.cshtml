@@ -43,6 +43,7 @@
     <link href="~/adminasset/css/slim.header-two.css" rel="stylesheet" />
     <link href="~/adminasset/css/slim.min.css" rel="stylesheet" />
     <link href="~/adminasset/css/slim.one.css" rel="stylesheet" />
+    @await RenderSectionAsync("Style",required: false)
 </head>
 <body>
     <div class="slim-header">
@@ -221,7 +222,7 @@
                     <div class="sub-item">
                         <ul>
                             <li><a asp-area="Admin" asp-controller="Categories" asp-action="Index">Categories Manager </a></li>
-                            <li><a asp-area="Admin" asp-controller="Account" asp-action="Index">Account Manager </a></li>
+                            <li><a asp-area="Admin" asp-controller="Accounts" asp-action="Index">Account Manager </a></li>
                             <li><a asp-area="Admin" asp-controller="Roles" asp-action="Index">Access Permission</a></li>
                         </ul>
                     </div><!--dropdown menu-->
@@ -261,5 +262,6 @@
     <script src="~/adminasset/js/ResizeSensor.js"></script>
     <script src="~/adminasset/js/dashboard.js"></script>
     <script src="~/adminasset/js/slim.js"></script>
+    @await RenderSectionAsync("Scripts",required: false)
 </body>
 </html>

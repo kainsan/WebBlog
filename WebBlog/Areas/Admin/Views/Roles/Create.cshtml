@@ -14,27 +14,27 @@
         <h6 class="slim-pagetitle">Create New Account</h6>
     </div><!-- slim-pageheader -->
 
-    <div class="section-wrapper">
-        <form asp-area="Admin" asp-controller="Roles" asp-action="Create" method="post">
-        <div class="form-layout">
-            <div class="row mg-b-25">
-                <div class="col-lg-4">
-                    <div class="form-group">
-                        <label class="form-control-label">Role name: <span class="tx-danger">*</span></label>
-                        <input class="form-control" type="text" asp-for="RoleName">
-                    </div>
-                </div><!-- col-4 -->
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label class="form-control-label">Role Description: <span class="tx-danger">*</span></label>
-                        <input class="form-control" type="text" asp-for="RoleDescription">
-                    </div>
-                </div><!-- col-4 -->
-             </div>   
-        </form>
-            <div class="form-layout-footer">
-                <button class="btn btn-primary bd-0">Submit Form</button>
-                <button class="btn btn-secondary bd-0">Cancel</button>
+        <div class="section-wrapper"
+            <form asp-area="Admin" asp-controller="Roles" asp-action="Create" method="post">
+            <div class="form-layout">
+                <div class="row mg-b-25">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label class="form-control-label">Role name: <span class="tx-danger">*</span></label>
+                            <input class="form-control" type="text" asp-for="RoleName">
+                        </div>
+                    </div><!-- col-4 -->
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-control-label">Role Description: <span class="tx-danger">*</span></label>
+                            <input class="form-control" type="text"  asp-for="RoleName">
+                        </div>
+                    </div><!-- col-4 -->
+                 </div>   
+            </form>
+                <div class="form-layout-footer">
+                    <button class="btn btn-primary bd-0">Submit Form</button>
+                    <button class="btn btn-secondary bd-0">Cancel</button>
             </div><!-- form-layout-footer -->
         </div><!-- form-layout -->
     </div><!-- section-wrapper -->

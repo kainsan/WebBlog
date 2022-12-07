@@ -1,0 +1,122 @@
+﻿@model WebBlog.Models.Post
+
+@{
+    ViewData["Title"] = "Create New Post";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+@section Style{
+    
+    <link href="~/AdminAsset/lib/select2/css/select2.min.css" rel="stylesheet" />
+    
+}
+
+    <div class="slim-pageheader">
+    <ol class="breadcrumb slim-breadcrumb">
+        <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Posts" asp-action="Index">Posts List</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Create New Categories</li>
+    </ol>
+    <h6 class="slim-pagetitle">Create New Categories</h6>
+</div><!-- slim-pageheader -->
+
+     <div class="section-wrapper">
+        <div class="form-layout">
+            <form asp-area="Admin" asp-controller="Posts" asp-action="Create" method="post" enctype="multipart/form-data">
+
+            <div class="row mg-b-25">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                            <label class="form-control-label">Description: <span class="tx-danger">*</span></label>
+                        <input class="form-control" type="text" asp-for="Title">
+                    </div>
+
+                </div><!-- col-6 -->
+                 <div class="col-lg-12">
+                        <div class="form-group ">
+                            <label class="form-control-label">Short Description: <span class="tx-danger">*</span></label>
+                            <input class="form-control" type="text" maxlength="254" asp-for="Scontents" />
+                        </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label class="form-control-label">Categories: <span class="tx-danger">*</span></label>
+                        <select class="form-control select2" asp-for="CatId" asp-items="@ViewBag.Danhmuc" required>
+                                    <option label="Categories"></option>
+                        </select>
+                    </div>
+                </div><!-- col-4 -->
+                <div class="col-lg-6">
+                    <div class="form-group mg-b-10-force">
+                        <label class="form-control-label">Avatar: <span class="tx-danger">*</span></label>
+                        <input class="fThumb" type="file" class="form-control-file" asp-for="Thumb" />
+                    </div>
+                </div><!-- col-6 -->
+
+                <hr />
+                        <div class="col-lg-12">
+                            <div class="form-group mg-b-10-force">
+                                <label class="form-control-label">Tags: <span class="tx-danger">*</span></label>
+                                <input class="form-control" type="text" asp-for="Tags" />
+                            </div>
+                       
+                    </div><!-- col-12 -->
+                    <div class="col-lg-12">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">MetaKey: <span class="tx-danger">*</span></label>
+                            <input class="form-control" type="text" asp-for="Cat.MetaKey" />
+                        </div>
+                    </div><!-- col-12 -->
+                    <div class="col-lg-12">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Meta Desc: <span class="tx-danger">*</span></label>
+                            <input class="form-control" type="text" asp-for="Cat.MetaDesc" />
+                        </div>
+                    </div><!-- col-12 -->
+
+                <br />
+                        <div class="col-lg-12">
+                            <div class="form-group mg-b-10-force">
+                                <label class="form-control-label">Describre: <span class="tx-danger">*</span></label>
+                            <textarea asp-for="Contents"></textarea>
+                            </div>
+                        </div><!-- col-12 -->
+                </div>
+
+              
+                
+                <div class="col-lg-4">
+                        <div class="form-group mg-b-10-force">
+                            <input type="checkbox" asp-for="Published" /><span>Published</span>
+                    </div>
+                </div><!-- col-4 -->
+                <div class="col-lg-4">
+                    <div class="form-group mg-b-10-force">
+                            <input  type="checkbox" asp-for="IsHot" /><span>Is NewsHot</span>
+                    </div>
+                </div><!-- col-4 -->
+                <div class="col-lg-4">
+                    <div class="form-group mg-b-10-force">
+                            <input type="checkbox"  asp-for="IsNewsfeed" /><span >Is NewsFeed</span>
+                    </div>
+                </div><!-- col-4 -->
+                
+            </><!--row-->
+
+            <div class="form-layout-footer">
+                <button class="btn btn-primary bd-0">Submit Post</button>
+                <button class="btn btn-secondary bd-0" onclick="test()">Cancel</button>
+            </div><!--form-layout-footer-->
+        </form>
+        </div><!--form-layout-->
+     </div><!--section-wrapper-->
+
+
+@section Scripts {
+    <script src="https://cdn.ckeditor.com/4.13.0/standard/ckeditor.js"></script>
+    <script src="~/AdminAsset/lib/select2/js/select2.min.js"></script>
+
+    <script>
+        CKEDITOR.replace('Contents');
+    </script>
+   
+   
+ }
